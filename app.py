@@ -1,20 +1,11 @@
 import streamlit as st
-# import pandas as pd
-# import plotly.graph_objects as go
-# import plotly.express as px
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# import pickle
 import requests
+import json
 
 
 st.set_page_config(page_title = "api dokair",
                    layout = "wide",
                    )
-
-
-url = 'https://maxinaiskebabou.azurewebsites.net//predict'
 
 
 headers = {
@@ -29,5 +20,23 @@ pw = st.text_input('petal_width', '0')
 
 if st.button('predict'):
     data = f'{{"sepal_length": {sl},"sepal_width": {sw},"petal_length": {pl},"petal_width": {pw}}}'
-    response = requests.post(url, headers=headers, data=data)
+    response = requests.post('https://maxinaiskebabou.azurewebsites.net/predict', headers=headers, data=data)
     st.write(response.text)
+
+    response_json = json.loads(response.text)
+    prediction = response_json["prediction"]
+    probability = response_json["probability"]
+
+    truc = f"{sl} {sw} {pl} {pw}"
+
+    inputs = {
+        "input": truc,
+        "prediction": prediction,
+        "probabilité": probability
+    }
+
+    add = requests.post('https://maxinaiskebabou.azurewebsites.net/add', headers=headers, json=inputs)
+
+if st.button('clear'):
+    delete = requests.post('https://maxinaiskebabou.azurewebsites.net/del', headers= headers)
+    st.write(delete.text)
