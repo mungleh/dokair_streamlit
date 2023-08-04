@@ -15,8 +15,8 @@ WORKDIR /app
 RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
 
-EXPOSE 8001
+EXPOSE 8501
 
 
 # execute the command python main.py (in the WORKDIR) to start the app
-CMD ["streamlit", "run", "app/app.py","--server.port", "8001"]
+CMD ["streamlit", "run", "app.py","--server.port", "8501"]
