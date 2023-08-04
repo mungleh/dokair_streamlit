@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://maxinaiskebabou.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_ce9724bf52a546ccb8e896cbf12f1d99 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_cda4d2461e544797af0e92fac121d6d2 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_879ae8f121694805be56ac169d28fb77 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_e453ae4cee7946c3a801e98fcd00d381 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: maxinaiskebabou.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ce9724bf52a546ccb8e896cbf12f1d99 }}/streamlitazurekebab:${{ github.sha }}
+        tags: maxinaiskebabou.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_879ae8f121694805be56ac169d28fb77 }}/maxinaistream:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'maxinaiskebaboustreamlit'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_66a0e9a7c6c34a8a9cc88ca89f3276a1 }}
-        images: 'maxinaiskebabou.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ce9724bf52a546ccb8e896cbf12f1d99 }}/streamlitazurekebab:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_1bc9b44e5ffe4288806c8e1ad04a93c8 }}
+        images: 'maxinaiskebabou.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_879ae8f121694805be56ac169d28fb77 }}/maxinaistream:${{ github.sha }}'
