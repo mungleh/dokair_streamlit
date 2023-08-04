@@ -17,4 +17,4 @@ RUN pipenv install --system --deploy --ignore-pipfile
 
 
 # execute the command python main.py (in the WORKDIR) to start the app
-CMD uvicorn fast:app --host 0.0.0.0 --port $PORT
+CMD streamlit run app.py
