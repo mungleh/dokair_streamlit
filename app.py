@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import requests
 import json
 
@@ -13,30 +14,39 @@ headers = {
    'Content-Type': 'application/json',
 }
 
-sl = st.text_input('sepal_length', '0')
-sw = st.text_input('sepal_width', '0')
-pl = st.text_input('petal_length', '0')
-pw = st.text_input('petal_width', '0')
+col1,col2 = st.columns(2)
 
-if st.button('predict'):
-    data = f'{{"sepal_length": {sl},"sepal_width": {sw},"petal_length": {pl},"petal_width": {pw}}}'
-    response = requests.post('https://maxinaiskebabou.azurewebsites.net/predict', headers=headers, data=data)
-    st.write(response.text)
+with col1:
+    sl = st.text_input('sepal_length', '0')
+    sw = st.text_input('sepal_width', '0')
+    pl = st.text_input('petal_length', '0')
+    pw = st.text_input('petal_width', '0')
 
-    response_json = json.loads(response.text)
-    prediction = response_json["prediction"]
-    probability = response_json["probability"]
+    if st.button('predict'):
+        data = f'{{"sepal_length": {sl},"sepal_width": {sw},"petal_length": {pl},"petal_width": {pw}}}'
+        response = requests.post('https://maxinaiskebabou.azurewebsites.net/predict', headers=headers, data=data)
+        st.write(response.text)
 
-    truc = f"{sl} {sw} {pl} {pw}"
+        response_json = json.loads(response.text)
+        prediction = response_json["prediction"]
+        probability = response_json["probability"]
 
-    inputs = {
-        "input": truc,
-        "prediction": prediction,
-        "probabilité": probability
-    }
+        truc = f"{sl} {sw} {pl} {pw}"
 
-    add = requests.post('https://maxinaiskebabou.azurewebsites.net/add', headers=headers, json=inputs)
+        inputs = {
+            "input": truc,
+            "prediction": prediction,
+            "probabilité": probability
+        }
 
-if st.button('clear'):
-    delete = requests.post('https://maxinaiskebabou.azurewebsites.net/del', headers= headers)
-    st.write(delete.text)
+        add = requests.post('https://maxinaiskebabou.azurewebsites.net/add', headers=headers, json=inputs)
+
+    if st.button('clear'):
+        delete = requests.post('https://maxinaiskebabou.azurewebsites.net/del', headers= headers)
+        st.write(delete.text)
+
+
+with col2:
+    st.write('Inputs history')
+    df = pd.DataFrame(requests.get('https://maxinaiskebabou.azurewebsites.net', headers=headers).json())
+    st.dataframe(df)
